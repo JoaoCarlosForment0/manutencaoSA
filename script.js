@@ -61,9 +61,6 @@ app.put("/tickets/:id/status", (req, res) => {
   const t = db.find((x) => x.id == req.params.id);
   if (!t) return res.status(404).send("not found");
   t.status = req.body.status;
-  if (Math.random() < 0.3) {
-    return res.status(500).send("random error");
-  }
   writeDb(db);
   res.json({ ok: true });
 });
