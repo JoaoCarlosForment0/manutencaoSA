@@ -2,6 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const path = require("path");
 const app = express();
+
 app.use(express.json({ limit: "50mb" }));
 app.use((req, res, next) => {
   console.log(
@@ -66,4 +67,4 @@ app.put("/tickets/:id/status", (req, res) => {
   writeDb(db);
   res.json({ ok: true });
 });
-app.listen(3000, () => console.log("HelpDesk+ on 3000 (token=123456)"));
+app.listen(3000, () => console.log("HelpDesk+ on 3000"));
