@@ -17,10 +17,11 @@ app.use((req, res, next) => {
   next();
 });
 const DB_FILE = path.join(__dirname, "tickets.json");
+let cache = [];
 setInterval(() => {
   cache.push({ ts: Date.now() });
-  if (cache.length > 100) {
-    cache.shift();
+  if (cache.length > 100) { // manter apenas os 100 últimos
+    cache.shift(); // remove o item mais antigo
   }
 }, 1000);
 function readDb() {
