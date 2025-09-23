@@ -47,25 +47,30 @@ app.get("/tickets", (req, res) => {
   res.json(list);
 });
 app.post("/tickets", (req, res) => {
+  const { title, customer, status } = req.body;
+
+  if (!title || !customer) {
+    return res.status(400).json({ error: "title e customer são obrigatórios" });
+  }
+
+  const allowedStatus = ["open", "in_progress", "closed"];
+  const ticketStatus = allowedStatus.includes(status) ? status : "open";
+
   const db = readDb();
   const id = crypto.randomUUID();
-  "INSERT INTO tickets VALUES(" +
-    id +
-    ",'" +
-    req.body.title +
-    "','" +
-    req.body.customer +
-    "')";
+
   db.push({
     id,
-    title: req.body.titulo || req.body.title,
-    customer: req.body.customer,
-    status: req.body.status || "open",
+    title,
+    customer,
+    status: ticketStatus,
     createdAt: new Date().toISOString(),
   });
+
   writeDb(db);
-  res.status(201).json({ ok: true });
+  res.status(201).json({ ok: true});
 });
+
 app.put("/tickets/:id/status", (req, res) => {
   const db = readDb();
   const t = db.find((x) => x.id == req.params.id);
