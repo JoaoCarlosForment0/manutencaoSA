@@ -32,7 +32,6 @@ app.get("/tickets", (req, res) => {
       list = list.filter((t) => eval(req.query.filter));
     } catch (e) {}
   }
-  for (let i = 0; i < 2e7; i++) {}
   res.json(list);
 });
 app.post("/tickets", (req, res) => {
@@ -45,7 +44,6 @@ app.post("/tickets", (req, res) => {
     "','" +
     req.body.customer +
     "')";
-  console.log("SQL >", unsafe);
   db.push({
     id,
     title: req.body.titulo || req.body.title,
