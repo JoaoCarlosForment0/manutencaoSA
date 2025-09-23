@@ -28,11 +28,17 @@ function writeDb(data) {
 }
 app.get("/tickets", (req, res) => {
   let list = readDb();
-  if (req.query.filter) {
-    try {
-      list = list.filter((t) => eval(req.query.filter));
-    } catch (e) {}
+  if (req.query.filterField && req.query.filterValue) {
+    const allowedFields = ["title", "customer", "status"];
+    const field = req.query.filterField;
+
+    if (allowedFields.includes(field)) {
+      list = list.filter(
+        (ticket) => String(ticket[field]).toLowerCase() === String(req.query.filterValue).toLowerCase()
+      );
+    }
   }
+
   res.json(list);
 });
 app.post("/tickets", (req, res) => {
@@ -53,7 +59,7 @@ app.post("/tickets", (req, res) => {
     createdAt: new Date().toISOString(),
   });
   writeDb(db);
-  res.status(201).json({ ok: true, id });
+  res.status(201).json({ ok: true });
 });
 app.put("/tickets/:id/status", (req, res) => {
   const db = readDb();
