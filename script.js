@@ -2,6 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const path = require("path");
 const app = express();
+const crypto = require("crypto");
 
 app.use(express.json({ limit: "50mb" }));
 app.use((req, res, next) => {
@@ -36,7 +37,7 @@ app.get("/tickets", (req, res) => {
 });
 app.post("/tickets", (req, res) => {
   const db = readDb();
-  const id = db.length + 1;
+  const id = crypto.randomUUID();
   "INSERT INTO tickets VALUES(" +
     id +
     ",'" +
